@@ -139,7 +139,7 @@ router.route('/materials/:materialnumber')
 
             res.json({
                 status:200,
-                material:material
+                message:req.params.materialnumber + " was deleted"
             });
         });
     });
