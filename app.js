@@ -91,6 +91,8 @@ router.route('/materials/:materialnumber')
         Material.findOne({'materialnumber': req.params.materialnumber}, function(err, material) {
 
            console.log(material);
+            console.log(req.body.materialnumber);
+            console.log(req.body.materialdescription);
 
 
             if (err) {
@@ -99,10 +101,9 @@ router.route('/materials/:materialnumber')
                     error:err
                 });
             }
-            console.log(req.body.materialnumber);
-            console.log(req.body.materialdescription);
 
-            if (!req.body.materialnumber || !req.body.materialdescription) {
+
+            /*if (!req.body.materialnumber || !req.body.materialdescription) {
                 res.send({
                     status:400,
                     message:"You must provide a valid parameter for materialnumber and materialdescription.  Changes can be made to one or both parameters"
@@ -124,7 +125,7 @@ router.route('/materials/:materialnumber')
                     material:material
                 });
             });
-        });
+        });*/
     })
 
     .delete(function(req, res) {
