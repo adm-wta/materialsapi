@@ -105,6 +105,7 @@ router.route('/materials/:materialnumber')
                     status:400,
                     message:"You must provide a valid parameter for materialnumber and materialdescription.  Changes can be made to one or both parameters"
                 });
+                res.end();
             }
 
             material.materialnumber = req.body.materialnumber;
