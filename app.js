@@ -124,8 +124,8 @@ router.route('/materials/:materialnumber')
                     status:200,
                     material:material
                 });
-            });
-        });*/
+            });*/
+        });
     })
 
     .delete(function(req, res) {
