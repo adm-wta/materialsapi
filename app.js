@@ -17,6 +17,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Content-Type", "application/json");
     next();
 });
 
@@ -26,40 +27,54 @@ router.route('/materials')
     .post(function(req, res) {
         var material = new Material();
         if(!req.body.materialnumber || !req.body.materialdescription){
+            res.status(400);
             res.send({
                 status:400,
                 message:"Required parameter missing, you must provide both a materialnumber and materialdescription parameter"
             });
+            res.end();
         }
-        material.materialnumber = req.body.materialnumber;
-        material.materialdescription = req.body.materialdescription;
+        else {
+            material.materialnumber = req.body.materialnumber;
+            material.materialdescription = req.body.materialdescription;
 
-        material.save(function(err) {
-            if (err) {
-                res.send({
-                    status: 500,
-                    error: err
-                });
-            }
-            res.json({
-                status:200,
-                material:material
+            material.save(function (err) {
+                if (err) {
+                    res.status(500);
+                    res.send({
+                        status: 500,
+                        error: err
+                    });
+                    res.end();
+                }
+                else {
+                    res.json({
+                        status: 200,
+                        material: material
+                    });
+                    res.end();
+                }
             });
-        });
+        }
 
     })
     .get(function(req, res) {
         Material.find(function(err, materials) {
             if (err) {
+                res.status(500);
                 res.send({
                     status:500,
                     error:err
                 });
+                res.end();
             }
-            res.json({
-                status:200,
-                materials:materials
-            });
+            else {
+                res.json({
+                    status: 200,
+                    materials: materials
+                });
+                res.end();
+            }
         });
     });
 
@@ -69,10 +84,12 @@ router.route('/materials/:materialnumber')
     .get(function(req, res) {
         Material.findOne({'materialnumber': req.params.materialnumber}, function(err, material) {
             if (err){
+                res.status(500);
                 res.send({
                     status:500,
                     error:err
                 });
+                res.end();
             }
             if(!material){
                 res.status(404);
@@ -95,40 +112,49 @@ router.route('/materials/:materialnumber')
 
         Material.findOne({'materialnumber': req.params.materialnumber}, function(err, material) {
 
-
-
             if (err) {
+                res.status(500);
                 res.send({
                     status:500,
                     error:err
                 });
+                res.end();
             }
 
 
             if (!req.body.materialnumber || !req.body.materialdescription) {
+                res.status(400);
                 res.send({
                     status:400,
                     message:"You must provide a valid parameter for materialnumber and materialdescription.  Changes can be made to one or both parameters"
                 });
                 res.end();
             }
+            else {
 
-            material.materialnumber = req.body.materialnumber;
-            material.materialdescription = req.body.materialdescription;
+                material.materialnumber = req.body.materialnumber;
+                material.materialdescription = req.body.materialdescription;
 
-            material.save(function(err) {
-                if (err) {
-                    res.send({
-                        status:500,
-                        error:err
-                    });
-                }
-                res.json({
-                    status:200,
-                    material:material
+                material.save(function (err) {
+                    if (err) {
+                        res.status(500);
+                        res.send({
+                            status: 500,
+                            error: err
+                        });
+                        res.end();
+                    }
+                    else {
+                        res.json({
+                            status: 200,
+                            material: material
+                        });
+                        res.end();
+                    }
                 });
-            });
+              }
         });
+
     })
 
     .delete(function(req, res) {
@@ -136,16 +162,21 @@ router.route('/materials/:materialnumber')
             materialnumber: req.params.materialnumber
         }, function(err, material) {
             if (err){
+                res.status(500);
                 res.send({
                     status:500,
                     error:err
                 });
+                res.end();
             }
+            else {
 
-            res.json({
-                status:200,
-                message:req.params.materialnumber + " was deleted"
-            });
+                res.json({
+                    status: 200,
+                    message: req.params.materialnumber + " was deleted"
+                });
+                res.end();
+            }
         });
     });
 
