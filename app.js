@@ -75,7 +75,7 @@ router.route('/materials/:materialnumber')
                 });
             }
             if(!material){
-                res.status(404);
+                //res.status(404);
                 res.send({
                     status:404,
                     message:"No material found for that material number"
