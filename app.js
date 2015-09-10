@@ -80,6 +80,7 @@ router.route('/materials/:materialnumber')
                     status:404,
                     message:"No material found for that material number"
                 });
+                res.end();
             }
             res.json({
                 status:200,
