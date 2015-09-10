@@ -82,11 +82,13 @@ router.route('/materials/:materialnumber')
                 });
                 res.end();
             }
-            res.json({
-                status:200,
-                material:material
-            });
-            res.end();
+            else {
+                res.json({
+                    status:200,
+                    material:material
+                });
+                res.end();
+            }
         });
     })
     .put(function(req, res) {
