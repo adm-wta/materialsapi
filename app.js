@@ -121,8 +121,17 @@ router.route('/materials/:materialnumber')
                 res.end();
             }
 
+            if(!material){
+                res.status(404);
+                res.send({
+                    status:404,
+                    message:"No material found for that material number"
+                });
+                res.end();
+            }
 
-            if (!req.body.materialnumber || !req.body.materialdescription) {
+
+            else if (!req.body.materialnumber || !req.body.materialdescription) {
                 res.status(400);
                 res.send({
                     status:400,
@@ -158,26 +167,44 @@ router.route('/materials/:materialnumber')
     })
 
     .delete(function(req, res) {
-        Material.remove({
-            materialnumber: req.params.materialnumber
-        }, function(err, material) {
-            if (err){
-                res.status(500);
+
+        Material.findOne({'materialnumber': req.params.materialnumber}, function(err, material) {
+
+            if(!material){
+                res.status(404);
                 res.send({
-                    status:500,
-                    error:err
+                    status:404,
+                    message:"No material found for that material number"
                 });
                 res.end();
             }
             else {
+                Material.remove({
+                    materialnumber: req.params.materialnumber
+                }, function(err, material) {
+                    if (err){
+                        res.status(500);
+                        res.send({
+                            status:500,
+                            error:err
+                        });
+                        res.end();
+                    }
+                    else {
 
-                res.json({
-                    status: 200,
-                    message: req.params.materialnumber + " was deleted"
+                        res.json({
+                            status: 200,
+                            message: req.params.materialnumber + " was deleted"
+                        });
+                        res.end();
+                    }
                 });
-                res.end();
             }
         });
+
+
+
+
     });
 
 app.use('/api', router);
